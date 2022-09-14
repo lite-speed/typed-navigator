@@ -8,11 +8,19 @@ export type $paramsType = typeof $params;
 
 //We have to use private symbol accessors so that we expose a small typescript surface area to the outside world
 //but can still access the data we need within this file. A bit weird but likely the best approach for DX.
-const type = Symbol.for("type");
-const validators = Symbol.for("validators");
-const enumOptions = Symbol.for("enumOptions");
-const defaultValue = Symbol.for("defaultValue");
-const isRequired = Symbol.for("isRequired");
+export const type = Symbol.for("type");
+export const validators = Symbol.for("validators");
+export const enumOptions = Symbol.for("enumOptions");
+export const defaultValue = Symbol.for("defaultValue");
+export const isRequired = Symbol.for("isRequired");
+
+// export const symbols = {
+//   type,
+//   validators,
+//   enumOptions,
+//   defaultValue,
+//   isRequired
+// }
 
 export class ParamTypesClass<
   T extends PropertyKey,

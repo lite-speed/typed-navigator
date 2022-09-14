@@ -3,8 +3,8 @@ import { RouteDefWithoutUI, LeafRouteDefWithoutUI, SwitchRouteDefWithoutUI, Stac
 import { Simplify } from "type-fest";
 import { GetInputParamsFromPath } from "../implementations/params.js";
 
-const $path = Symbol.for("$path");
-const $routeDef = Symbol.for("$routeDef");
+export const $path = Symbol.for("$path");
+export const $routeDef = Symbol.for("$routeDef");
 
 export type $pathType = typeof $path;
 export type $routeDefType = typeof $routeDef;

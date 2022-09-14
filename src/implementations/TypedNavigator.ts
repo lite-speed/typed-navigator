@@ -10,9 +10,10 @@ export function createTypedNavigator<T extends RouteDefWithoutUI>(rootDef: T): T
   return new TypedNavigator(rootDef) as any;
 }
 
+export const PATHS_ACCESSOR = Symbol.for("PATHS_ACCESSOR");
 export class TypedNavigator<T extends RouteDefWithoutUI> {
   protected rootDef: T;
-  protected PATHS_ACCESSOR = Symbol.for("PATHS_ACCESSOR");
+  protected PATHS_ACCESSOR = PATHS_ACCESSOR;
 
   constructor(rootDef: T) {
     this.rootDef = rootDef;

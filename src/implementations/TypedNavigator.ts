@@ -12,8 +12,7 @@ export function createTypedNavigator<T extends RouteDefWithoutUI>(rootDef: T): T
 
 export const PATHS_ACCESSOR = Symbol.for("PATHS_ACCESSOR");
 export class TypedNavigator<T extends RouteDefWithoutUI> {
-  protected rootDef: T;
-  protected PATHS_ACCESSOR = PATHS_ACCESSOR;
+  private rootDef: T;
 
   constructor(rootDef: T) {
     this.rootDef = rootDef;
@@ -29,7 +28,7 @@ export class TypedNavigator<T extends RouteDefWithoutUI> {
         {
           set: () => false,
           get: (__, propKey) => {
-            if (propKey === this.PATHS_ACCESSOR) {
+            if (propKey === PATHS_ACCESSOR) {
               return parentPaths;
             } else {
               parentPaths.push(propKey as string);
@@ -77,15 +76,7 @@ export class TypedNavigator<T extends RouteDefWithoutUI> {
     return errors.length ? { isValid: false as const, errors } : { isValid: true as const };
   }
 
-  protected getPathArrFromPathObjResult(path: PathObjResult<any, any, any, any, any, any, any, any>) {
-    const pathArr: string[] = path[this.PATHS_ACCESSOR];
-    if (!pathArr) {
-      throw new Error("Invalid path object passed to generateUrl!");
-    }
-    return pathArr;
-  }
-
-  protected getAccumulatedParamTypesAtPath(pathArr: string[], throwOnNotFound: boolean): Record<string, any> {
+  private getAccumulatedParamTypesAtPath(pathArr: string[], throwOnNotFound: boolean): Record<string, any> {
     const paramTypes: Record<string, ParamTypesClass<any, any, any>> = {};
     this.forEachRouteDefUsingPathArray(pathArr, (a) => {
       if (!a.thisDef) {
@@ -103,15 +94,23 @@ export class TypedNavigator<T extends RouteDefWithoutUI> {
     return paramTypes;
   }
 
+  protected getPathArrFromPathObjResult = (path: PathObjResult<any, any, any, any, any, any, any, any>) => {
+    const pathArr: string[] = path[PATHS_ACCESSOR];
+    if (!pathArr) {
+      throw new Error("Invalid path object passed to generateUrl!");
+    }
+    return pathArr;
+  };
+
   /**
    * Iterates through the route definition with the given path, calling `process` for each route definition from root to leaf
    */
-  protected forEachRouteDefUsingPathArray(
+  protected forEachRouteDefUsingPathArray = (
     pathArr: string[],
     processFn: (
       a: { thisDef: T; thisRouteName: string; thisPath: string[] } | { thisDef: null; thisPath: string[] },
     ) => void,
-  ) {
+  ) => {
     processFn({ thisDef: this.rootDef, thisRouteName: "", thisPath: [] });
 
     let currDef: T | null = this.rootDef;
@@ -126,13 +125,13 @@ export class TypedNavigator<T extends RouteDefWithoutUI> {
         break;
       }
     }
-  }
+  };
 
-  protected generateUrlFromPathArr(
+  protected generateUrlFromPathArr = (
     pathArr: string[],
     inputParams: Record<string, any>,
     opts?: { shouldValidate?: boolean },
-  ) {
+  ) => {
     const shouldValidate = opts?.shouldValidate ?? true;
 
     const paramTypes = this.getAccumulatedParamTypesAtPath(pathArr, true);
@@ -156,7 +155,7 @@ export class TypedNavigator<T extends RouteDefWithoutUI> {
     const pathStr = pathArr.join("/");
 
     return pathStr + queryStr;
-  }
+  };
 }
 
 export function parseUrl(url: string) {
